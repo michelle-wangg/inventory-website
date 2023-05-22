@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>List of Items</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat&family=Quicksand&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- https://www.w3schools.com/css/css_navbar_horizontal.asp -->
+    <div class="nav-bar">
+      <ul class="title">
+        <li><a href="items.html">StorageManager</a></li>
+      </ul>
+      <ul>
+        <li><a href="about.html">About</a></li>
+        <li><a href="items.html">Home</a></li>
+      </ul>
+    </div>
+
+    <div class="home">
+      <div id="addItem">
+        <h3>Add an Item</h3>
+        <form id="itemForm">
+          <div class="item-form">
+            <label for="item-name">Item Name: </label>
+            <input type="text" id="nameInput" required>
+          </div>
+          <div class="item-form">
+            <label for="description">Description: </label>
+            <br>
+            <textarea id="descriptionInput" required></textarea>
+          </div>
+          <div class="item-form">
+            <label for="price">Price: </label>
+            <input type="number" id="priceInput" min="0" required>
+          </div>
+          <div class="item-form">
+            <label for="image">Image of Item (as a URL): </label>
+            <input type="url" id="urlInput" required>
+          </div>
+          <button type="submit">Add Item</button>
+          <button type="reset">Reset Form</button>
+        </form>
+      </div>
+
+      <div id="displayItems">
+        <h3>List of Items</h3>
+        <button>Reset List</button>
+        <ul id="itemList"></ul>
+
+      </div>
+
+    </div>
+
+  <script type="module" src="items.js"></script>
+</body>
+</html>
