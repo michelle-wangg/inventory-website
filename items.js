@@ -73,28 +73,28 @@ function deleteCard(event) {
   }
 }
 
-const jsonArray = [
-  `{
+const jsonString = `[
+  {
     "itemName": "apple",
     "description": "cold and crunchy",
     "price": 5,
     "imageURL": "https://www.applesfromny.com/wp-content/uploads/2020/06/SnapdragonNEW.png"
-  }`,
-  `{
+  },
+  {
     "itemName": "pear",
     "description": "tasty and sweet",
     "price": 6,
     "imageURL": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Pears.jpg/440px-Pears.jpg"
-  }`,
-  `{
+  },
+  {
     "itemName": "strawberry",
     "description": "taste of summer",
     "price": 2,
     "imageURL": "https://hips.hearstapps.com/clv.h-cdn.co/assets/15/22/1432670258-strawberry-facts2.jpg?resize=980:*"
-  }`
-];
+  }
+]`;
 
-var items = jsonArray.map(jsonString => JSON.parse(jsonString));
+var items = JSON.parse(jsonString);
 
 const itemForm = document.getElementById('itemForm');
 itemForm.addEventListener('submit', addItemToList);
