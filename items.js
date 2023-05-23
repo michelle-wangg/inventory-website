@@ -21,8 +21,13 @@ function displayObjectsAsList(items) {
     urlDiv.innerHTML = `<img src="${item.imageURL}">`;
     li.appendChild(urlDiv);
 
+    const deleteDiv = document.createElement('div');
+    deleteDiv.innerHTML = `<button type="reset" id="deleteCard">Delete</button>`;
+    li.appendChild(deleteDiv)
+
     itemList.appendChild(li);
   });
+  resetDeleteButtons();
 }
 
 function addItemToList(event) {
@@ -58,6 +63,16 @@ function resetList() {
     displayObjectsAsList(items);
 }
 
+function deleteCard(event) {
+  const index = Array.from(deleteCardButtons).indexOf(event.target);
+  console.log("deleteButton pressed: "+index);
+  // button pressed is not delete button: -1
+  if (index != -1) {
+    items.splice(index, 1);
+    displayObjectsAsList(items);
+  }
+}
+
 const jsonArray = [
   `{
     "itemName": "apple",
@@ -81,10 +96,19 @@ const jsonArray = [
 
 var items = jsonArray.map(jsonString => JSON.parse(jsonString));
 
-displayObjectsAsList(items);
-
 const itemForm = document.getElementById('itemForm');
 itemForm.addEventListener('submit', addItemToList);
 
 const resetListButton = document.querySelector("#displayItems > button");
 resetListButton.addEventListener('click', resetList);
+
+var deleteCardButtons;
+
+function resetDeleteButtons() {
+  deleteCardButtons = document.querySelectorAll("#deleteCard");
+  deleteCardButtons.forEach(deleteButton => {
+    addEventListener('click', deleteCard, deleteButton);
+  });
+}
+
+displayObjectsAsList(items);
