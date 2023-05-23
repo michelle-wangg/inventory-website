@@ -24,6 +24,11 @@ body {
   width: 45%;
 }
 
+#card-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
 
 
 input {
@@ -52,6 +57,10 @@ textarea {
   float: right;
 }
 
+.item-form {
+  margin-bottom: 10px;
+}
+
 #itemList {
   list-style-type: none;
   display: block;
@@ -70,6 +79,7 @@ textarea {
   margin-left: auto;
   margin-right: auto;
   border-radius: 10%;
+  margin-top: 10px;
 }
 
 
