@@ -6,7 +6,7 @@ const About = () => {
     <div class="about">
       <div class="about-me">
         <h2>About Me</h2>
-        <img src={image} id="pfp" />
+        <img src={image} alt="profile" id="pfp" />
         <p>
           Hello! I'm Michelle, a third year computer science student at UBC
           currently on co-op.
