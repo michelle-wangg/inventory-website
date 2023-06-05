@@ -1,12 +1,12 @@
 import './styles.css';
-import ItemForm from './components/ItemForm';
 import Navbar from './components/Navbar';
+import MyComponent from './components/MyComponent';
 
 function App() {
   return (
     <div className="App">
       <Navbar />
-      <ItemForm />
+      <MyComponent />
     </div>
   );
 }

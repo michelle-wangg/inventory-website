@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import '../styles.css';
+import "../styles.css";
 
 const ItemForm = ({ addItem }) => {
   const [itemName, setItemName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
+  const [unitsRemaining, setUnitsRemaining] = useState("");
   const [imageUrl, setImageUrl] = useState("");
 
   const handleSubmit = (e) => {
@@ -14,7 +15,8 @@ const ItemForm = ({ addItem }) => {
       name: itemName,
       description: description,
       price: price,
-      imageUrl: imageUrl,
+      unitsRemaining: unitsRemaining,
+      imageURL: imageUrl,
     };
     // Pass the item object to the parent component's addItem function
     addItem(item);
@@ -22,6 +24,7 @@ const ItemForm = ({ addItem }) => {
     setItemName("");
     setDescription("");
     setPrice("");
+    setUnitsRemaining("");
     setImageUrl("");
   };
 
@@ -30,6 +33,7 @@ const ItemForm = ({ addItem }) => {
     setItemName("");
     setDescription("");
     setPrice("");
+    setUnitsRemaining("");
     setImageUrl("");
   };
 
@@ -48,8 +52,7 @@ const ItemForm = ({ addItem }) => {
         <br />
         <label>
           Description:
-          <input
-            type="textArea"
+          <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
@@ -58,9 +61,18 @@ const ItemForm = ({ addItem }) => {
         <label>
           Price:
           <input
-            type="text"
+            type="number"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
+          />
+        </label>
+        <br />
+        <label>
+          Units Remaining:
+          <input
+            type="number"
+            value={unitsRemaining}
+            onChange={(e) => setUnitsRemaining(e.target.value)}
           />
         </label>
         <br />
@@ -73,10 +85,12 @@ const ItemForm = ({ addItem }) => {
           />
         </label>
         <br />
-        <button type="submit">Add Item</button>
-        <button type="button" onClick={handleClear}>
-          Clear
-        </button>
+        <div className='buttons'>
+          <button type="submit">Add Item</button>
+          <button type="button" onClick={handleClear}>
+            Clear
+          </button>
+        </div>
       </form>
     </div>
   );
