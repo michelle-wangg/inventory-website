@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../styles.css";
 
-const ItemForm = ({ addItem }) => {
+const ItemForm = ({ dispatch }) => {
   const [itemName, setItemName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
@@ -19,7 +19,7 @@ const ItemForm = ({ addItem }) => {
       imageURL: imageUrl,
     };
     // Pass the item object to the parent component's addItem function
-    addItem(item);
+    dispatch({ type: 'ADD_ITEM', item });
     // Reset the form inputs
     setItemName("");
     setDescription("");
@@ -47,6 +47,7 @@ const ItemForm = ({ addItem }) => {
             type="text"
             value={itemName}
             onChange={(e) => setItemName(e.target.value)}
+            required
           />
         </label>
         <br />
@@ -55,6 +56,7 @@ const ItemForm = ({ addItem }) => {
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
+            required
           />
         </label>
         <br />
@@ -62,8 +64,11 @@ const ItemForm = ({ addItem }) => {
           Price:
           <input
             type="number"
+            min="0"
+            step="0.01"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
+            required
           />
         </label>
         <br />
@@ -71,17 +76,20 @@ const ItemForm = ({ addItem }) => {
           Units Remaining:
           <input
             type="number"
+            min="0"
             value={unitsRemaining}
             onChange={(e) => setUnitsRemaining(e.target.value)}
+            required
           />
         </label>
         <br />
         <label>
           Image URL:
           <input
-            type="text"
+            type="url"
             value={imageUrl}
             onChange={(e) => setImageUrl(e.target.value)}
+            required
           />
         </label>
         <br />

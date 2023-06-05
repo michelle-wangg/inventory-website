@@ -67,6 +67,20 @@ textarea {
   width: 100px;
 }
 
+@media (max-width: 600px) {
+  .myComponent {
+    flex-direction: column;
+  }
+
+  .addItemPanel  {
+    width: 100%;
+  }
+
+  .itemListPanel {
+    width: 100%;
+  }
+}
+
 
 button {
   margin: 20px;
