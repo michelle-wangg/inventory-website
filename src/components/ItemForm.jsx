@@ -39,7 +39,6 @@ const ItemForm = ({ dispatch }) => {
 
   return (
     <div className="addItem">
-      <h3>Item Form</h3>
       <form onSubmit={handleSubmit}>
         <label>
           Item Name:
