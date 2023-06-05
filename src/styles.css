@@ -25,15 +25,23 @@ textarea {
 }
 
 .navbar {
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
   background-color: #D2E9E9;
-  height: 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  color: white;
 }
 
-.navbar li {
-  float: right;
+.nav-links {
+  display: flex;
+}
+
+.nav-link {
+  display: block;
+  color: white;
+  text-decoration: none;
+  padding: 14px 16px;
 }
 
 .addItemPanel {
@@ -67,7 +75,37 @@ textarea {
   width: 100px;
 }
 
+#pfp {
+  width: 150px;
+  border-radius: 50%;
+}
+
+.about {
+  display:flex;
+  justify-content: space-around;
+}
+
+.about-me {
+  width: 45%;
+}
+
+.about-project {
+  width: 45%;
+}
+
 @media (max-width: 600px) {
+  .about {
+    flex-direction: column;
+  }
+
+  .about-me {
+    width: 100%;
+  }
+
+  .about-project {
+    width: 100%;
+  }
+
   .myComponent {
     flex-direction: column;
   }
@@ -98,4 +136,3 @@ button:hover {
 li a:hover {
   background-color: #C4DFDF;
 }
-

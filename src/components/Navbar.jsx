@@ -1,18 +1,21 @@
-import React from 'react';
-import '../styles.css';
+import React from "react";
+import { Link } from "react-router-dom";
+import "../styles.css";
 
 function Navbar() {
   return (
     <nav className="navbar">
-       <a href="#about" style={{ float: 'right', display: 'block', color: 'white', textAlign: 'center', padding: '14px 16px', textDecoration: 'none' }}>
-        About
-      </a>
-      <a href="#home" style={{ float: 'right', display: 'block', color: 'white', textAlign: 'center', padding: '14px 16px', textDecoration: 'none' }}>
-        Home
-      </a>
-      <a href="/" style={{ float: 'left', display: 'block', color: 'white', textAlign: 'center', padding: '14px 16px', textDecoration: 'none' }}>
+      <Link to="/" className="nav-link">
         StorageManager
-      </a>
+      </Link>
+      <div className="nav-links">
+        <Link to="/" className="nav-link">
+          Home
+        </Link>
+        <Link to="/about" className="nav-link">
+          About
+        </Link>
+      </div>
     </nav>
   );
 }
