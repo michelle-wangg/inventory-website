@@ -36,7 +36,7 @@ const itemReducer = (state, action) => {
   }
 };
 
-const MyComponent = () => {
+const Home = () => {
   const initialItems = [
     {
       id: 1,
@@ -83,7 +83,7 @@ const MyComponent = () => {
   }
 
   return (
-    <div className="myComponent">
+    <div className="home">
       <div className="addItemPanel">
         <h2>Add Item</h2>
         <ItemForm dispatch={dispatch} />
@@ -107,4 +107,4 @@ const MyComponent = () => {
   );
 };
 
-export default MyComponent;
+export default Home;

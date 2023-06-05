@@ -19,7 +19,12 @@ textarea {
   max-width: 100%;
 }
 
-.myComponent {
+h1 {
+  padding: 0px;
+  margin: 0px;
+}
+
+.home {
   display: flex;
   justify-content: space-between;
 }
@@ -106,7 +111,7 @@ ul > li > img {
     width: 100%;
   }
 
-  .myComponent {
+  .home {
     flex-direction: column;
   }
 

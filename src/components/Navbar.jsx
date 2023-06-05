@@ -6,7 +6,7 @@ function Navbar() {
   return (
     <nav className="navbar">
       <Link to="/" className="nav-link">
-        StorageManager
+        <h1>StorageManager</h1>
       </Link>
       <div className="nav-links">
         <Link to="/" className="nav-link">
