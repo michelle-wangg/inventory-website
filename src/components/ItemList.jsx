@@ -1,7 +1,7 @@
 import React from "react";
 import ItemDialog from "./ItemDialog";
 
-const ItemList = ({ items, dispatch }) => {
+function ItemList({ items, dispatch }) {
   return (
     <ul>
       {items.map((item) => (

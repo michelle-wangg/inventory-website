@@ -2,7 +2,7 @@ import React, { useReducer, useState } from "react";
 import ItemList from "./ItemList";
 import ItemForm from "./ItemForm";
 
-const itemReducer = (state, action) => {
+function itemReducer(state, action) {
   switch (action.type) {
     case "ADD_ITEM":
       const newItem = { ...action.item, id: Date.now() };
@@ -36,7 +36,7 @@ const itemReducer = (state, action) => {
   }
 };
 
-const Home = () => {
+function Home() {
   const initialItems = [
     {
       id: 1,
@@ -70,7 +70,7 @@ const Home = () => {
   const [items, dispatch] = useReducer(itemReducer, initialItems);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const handleSearchChange = (event) => {
+  function handleSearchChange(event) {
     setSearchQuery(event.target.value);
   };
 
@@ -78,7 +78,7 @@ const Home = () => {
     item.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const clearAll = () => {
+  function clearAll() {
     dispatch({ type: "CLEAR_ITEMS"});
   }
 

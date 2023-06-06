@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 
-const ItemDialog = ({ item, dispatch }) => {
+function ItemDialog({ item, dispatch }) {
   const [isOpen, setIsOpen] = useState(false);
 
-  const openDialog = () => {
+  function openDialog() {
     setIsOpen(true);
   };
 
-  const closeDialog = () => {
+  function closeDialog() {
     setIsOpen(false);
   };
 
-  const subtractUnit = () => {
+  function subtractUnit() {
     if (item.unitsRemaining <= 1) {
       closeDialog();
       dispatch({ type: "REMOVE_ITEM", id: item.id });
@@ -20,11 +20,11 @@ const ItemDialog = ({ item, dispatch }) => {
     }
   };
 
-  const addUnit = () => {
+  function addUnit () {
     dispatch({ type: "ADD_UNIT", id: item.id });
   };
 
-  const removeItem = () => {
+  function removeItem() {
     dispatch({ type: "REMOVE_ITEM", id: item.id });
   };
 

@@ -1,7 +1,7 @@
 import React from "react";
 import image from "./images/pfp.jpg";
 
-const About = () => {
+function About() {
   return (
     <div class="about">
       <div class="about-me">

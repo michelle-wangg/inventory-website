@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import "../styles.css";
 
-const ItemForm = ({ dispatch }) => {
+function ItemForm({ dispatch }) {
   const [itemName, setItemName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [unitsRemaining, setUnitsRemaining] = useState("");
   const [imageUrl, setImageUrl] = useState("");
 
-  const handleSubmit = (e) => {
+  function handleSubmit(e) {
     e.preventDefault();
     // Create an item object using the form data
     const item = {
@@ -28,7 +28,7 @@ const ItemForm = ({ dispatch }) => {
     setImageUrl("");
   };
 
-  const handleClear = () => {
+  function handleClear() {
     // Reset the form inputs
     setItemName("");
     setDescription("");
