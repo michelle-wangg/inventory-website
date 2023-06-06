@@ -92,7 +92,6 @@ const Home = () => {
         <h2>Items List</h2>
         <button onClick={clearAll}>Clear all</button>
         <br />
-        {/* Search input field */}
         <input
           type="text"
           value={searchQuery}
@@ -100,7 +99,6 @@ const Home = () => {
           placeholder="Search items"
         />
 
-        {/* ItemList component */}
         <ItemList items={filteredItems} dispatch={dispatch} />
       </div>
     </div>
