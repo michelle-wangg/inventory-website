@@ -1,14 +1,18 @@
 import React, { useState } from "react";
 import "../styles.css";
+import { useDispatch } from "react-redux";
+import { addItemAsync } from "../redux/items/thunks";
 
-function ItemForm({ dispatch }) {
+export const ItemForm = () => {
   const [itemName, setItemName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [unitsRemaining, setUnitsRemaining] = useState("");
   const [imageUrl, setImageUrl] = useState("");
 
-  function handleSubmit(e) {
+  const dispatch = useDispatch();
+
+  const handleSubmit = (e) => {
     e.preventDefault();
     // Create an item object using the form data
     const item = {
@@ -19,13 +23,9 @@ function ItemForm({ dispatch }) {
       imageURL: imageUrl,
     };
     // Pass the item object to the parent component's addItem function
-    dispatch({ type: 'ADD_ITEM', item });
+    dispatch(addItemAsync(item));
     // Reset the form inputs
-    setItemName("");
-    setDescription("");
-    setPrice("");
-    setUnitsRemaining("");
-    setImageUrl("");
+    handleClear();
   };
 
   function handleClear() {
