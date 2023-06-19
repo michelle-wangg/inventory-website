@@ -23,3 +23,19 @@ export const deleteItemAsync = createAsyncThunk(
     return itemId;
   }
 );
+
+export const addUnitAsync = createAsyncThunk(
+  actionTypes.ADD_UNIT,
+  async (itemId) => {
+    await ItemService.addUnit(itemId);
+    return itemId;
+  }
+);
+
+export const subtractUnitAsync = createAsyncThunk(
+  actionTypes.SUBTRACT_UNIT,
+  async (itemId) => {
+    await ItemService.subtractUnit(itemId);
+    return itemId;
+  }
+)

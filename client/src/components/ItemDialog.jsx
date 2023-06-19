@@ -1,7 +1,11 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { deleteItemAsync, addUnitAsync, getItemsAsync, subtractUnitAsync } from "../redux/items/thunks";
 
 const ItemDialog = ({ item }) => {
   const [isOpen, setIsOpen] = useState(false);
+
+  const dispatch = useDispatch();
 
   const openDialog = () => {
     setIsOpen(true);
@@ -12,15 +16,18 @@ const ItemDialog = ({ item }) => {
   };
 
   const subtractUnit = () => {
-    // onSubtractUnit(item.id);
+    dispatch(subtractUnitAsync(item.id));
+    dispatch(getItemsAsync());
   };
 
   const addUnit = () => {
-    // onAddUnit(item.id);
+    dispatch(addUnitAsync(item.id));
+    dispatch(getItemsAsync());
+
   };
 
   const removeItem = () => {
-    // deleteItemAsync(item.id);
+    dispatch(deleteItemAsync(item.id));
   };
 
   return (
@@ -33,9 +40,9 @@ const ItemDialog = ({ item }) => {
           <p>Price: ${item.price}</p>
           <p>Units Remaining: {item.unitsRemaining}</p>
 
-          <button onClick={subtractUnit}> - </button>
+          <button type="submit" onClick={subtractUnit}> - </button>
           <button onClick={closeDialog}>Close</button>
-          <button onClick={addUnit}> + </button>
+          <button type="submit" onClick={addUnit}> + </button>
         </div>
       )}
     </div>

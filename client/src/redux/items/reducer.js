@@ -1,12 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { REQUEST_STATE } from '../utils';
-import { addItemAsync, getItemsAsync, deleteItemAsync } from './thunks';
+import { addItemAsync, getItemsAsync, deleteItemAsync, addUnitAsync } from './thunks';
 
 const INITIAL_STATE = {
   list: [],
   getItems: REQUEST_STATE.IDLE,
   addItem: REQUEST_STATE.IDLE,
   deleteItem: REQUEST_STATE.IDLE,
+  addUnit: REQUEST_STATE.IDLE,
   error: null,
 };
 
@@ -50,6 +51,24 @@ const itemsSlice = createSlice({
       })
       .addCase(deleteItemAsync.rejected, (state, action) => {
         state.deleteItem = REQUEST_STATE.REJECTED;
+        state.error = action.error;
+      })
+      .addCase(addUnitAsync.pending, (state) => {
+        state.addUnit = REQUEST_STATE.PENDING;
+        state.error = null;
+      })
+      .addCase(addUnitAsync.fulfilled, (state, action) => {
+        state.addUnit = REQUEST_STATE.FULFILLED;
+        // Update the unit count of the corresponding item in the list
+        const itemId = action.payload.itemId;
+        const unitsToAdd = action.payload.unitsToAdd;
+        const itemIndex = state.list.findIndex((item) => item.id === itemId);
+        if (itemIndex !== -1) {
+          state.list[itemIndex].unitsRemaining += unitsToAdd;
+        }
+      })
+      .addCase(addUnitAsync.rejected, (state, action) => {
+        state.addUnit = REQUEST_STATE.REJECTED;
         state.error = action.error;
       });
   },

@@ -94,4 +94,33 @@ router.delete('/:itemId', function(req, res, next) {
   return res.send(deletedItem);
 });
 
+router.patch('/:itemId/addUnit', function(req, res, next) {
+  const itemId = req.params.itemId;
+
+  const foundItem = items.find((item) => item.id === itemId);
+
+  if (!foundItem) return res.status(404).send({ message: 'Item not found' });
+
+  foundItem.unitsRemaining ++;
+
+  return res.send(foundItem);
+});
+
+router.patch('/:itemId/subtractUnit', function(req, res, next) {
+  const itemId = req.params.itemId;
+
+  const foundItem = items.find((item) => item.id === itemId);
+
+  if (!foundItem) return res.status(404).send({ message: 'Item not found' });
+
+  foundItem.unitsRemaining --;
+
+  if (foundItem.unitsRemaining <= 0) {
+    const index = items.findIndex(item => item.id === foundItem.id);
+    items.splice(index, 1)[0];
+  }
+  return res.send(foundItem);
+})
+
 module.exports = router;
+

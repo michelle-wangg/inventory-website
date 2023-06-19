@@ -34,8 +34,34 @@ const deleteItem = async (itemId) => {
   }
 };
 
-export default {
+const addUnit = async (itemId) => {
+  const response = await fetch(`http://localhost:3001/items/${itemId}/addUnit`, {
+    method: 'PATCH'
+  });
+
+  if (!response.ok) {
+    const data = await response.json();
+    const errorMsg = data?.message;
+    throw new Error(errorMsg);
+  }
+};
+
+const subtractUnit = async (itemId) => {
+  const response = await fetch(`http://localhost:3001/items/${itemId}/subtractUnit`, {
+    method: 'PATCH'
+  });
+
+  if (!response.ok) {
+    const data = await response.json();
+    const errorMsg = data?.message;
+    throw new Error(errorMsg);
+  }
+};
+
+export {
   addItem,
   getItems,
-  deleteItem
+  deleteItem,
+  addUnit,
+  subtractUnit
 };

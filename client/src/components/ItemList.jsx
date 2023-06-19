@@ -5,7 +5,6 @@ import { getItemsAsync } from "../redux/items/thunks";
 
 const ItemList = () => {
   const items = useSelector(state => state.items.list);
-  console.log(items); 
   const dispatch = useDispatch();
 
   useEffect(() => {
