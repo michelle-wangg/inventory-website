@@ -57,6 +57,7 @@ const ItemList = () => {
           <div>
             <label>Sort Order:</label>
             <select value={sortOrder} onChange={handleSortOrderChange}>
+              <option value="">None</option>
               <option value="asc">Ascending</option>
               <option value="desc">Descending</option>
             </select>
