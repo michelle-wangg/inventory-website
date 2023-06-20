@@ -32,7 +32,33 @@ const items = [
 
 /* GET items listing. */
 router.get('/', function (req, res, next) {
-  return res.send(items);
+  let sortedItems = items.slice(); // Create a copy of the items array
+
+  // Sorting
+  const sortBy = req.query.sortBy;
+  const sortOrder = req.query.sortOrder === 'desc' ? -1 : 1;
+  if (sortBy) {
+    sortedItems.sort((a, b) => {
+      if (a[sortBy] < b[sortBy]) {
+        return -1 * sortOrder;
+      }
+      if (a[sortBy] > b[sortBy]) {
+        return 1 * sortOrder;
+      }
+      return 0;
+    });
+  }
+
+  // Searching
+  const searchQuery = req.query.searchQuery;
+  if (searchQuery) {
+    sortedItems = sortedItems.filter(item =>
+      item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.description.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }
+
+  return res.send(sortedItems);
 });
 
 router.get("/:itemId", function (req, res, next) {

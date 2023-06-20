@@ -64,7 +64,8 @@ ul {
   text-align: center;
 }
 
-ul > li {
+
+.listItem {
   background-color: white;
   margin: 10px;
   padding: 20px;
@@ -98,6 +99,18 @@ img {
   width: 45%;
 }
 
+.queryComponent {
+  background-color: red;
+  text-align: left;
+  background-color: white;
+  margin: 10px;
+  padding: 20px;
+  border-radius: 25px;
+}
+
+.filters {
+  display: flex;
+}
 @media (max-width: 600px) {
   .about {
     flex-direction: column;
@@ -152,7 +165,6 @@ li a:hover {
 
 #root > div > div > div.itemListPanel > div {
   text-align: center;
-  background-color: white;
   margin: 10px;
   padding: 20px;
   border-radius: 25px;

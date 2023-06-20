@@ -4,8 +4,8 @@ import ItemService from './service';
 
 export const getItemsAsync = createAsyncThunk(
   actionTypes.GET_ITEMS,
-  async () => {
-    return await ItemService.getItems();
+  async (options) => {
+    return await ItemService.getItems(options);
   }
 );
 
@@ -38,4 +38,11 @@ export const subtractUnitAsync = createAsyncThunk(
     await ItemService.subtractUnit(itemId);
     return itemId;
   }
-)
+);
+
+export const searchItemsAsync = createAsyncThunk(
+  actionTypes.SEARCH_ITEMS,
+  async (query) => {
+    return await ItemService.searchItems(query);
+  }
+);
