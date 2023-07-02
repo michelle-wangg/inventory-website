@@ -64,14 +64,15 @@ ul {
   text-align: center;
 }
 
-ul > li {
+
+.listItem {
   background-color: white;
   margin: 10px;
   padding: 20px;
   border-radius: 25px;
 }
 
-ul > li > img {
+img {
   display: block;
   margin-left: auto;
   margin-right: auto;
@@ -98,6 +99,18 @@ ul > li > img {
   width: 45%;
 }
 
+.queryComponent {
+  background-color: red;
+  text-align: left;
+  background-color: white;
+  margin: 10px;
+  padding: 20px;
+  border-radius: 25px;
+}
+
+.filters {
+  display: flex;
+}
 @media (max-width: 600px) {
   .about {
     flex-direction: column;
@@ -148,4 +161,11 @@ li a:hover {
 
 #root > div > div > div.addItemPanel > div > form > div > button:nth-child(1) {
   margin-left: 0px;
+}
+
+#root > div > div > div.itemListPanel > div {
+  text-align: center;
+  margin: 10px;
+  padding: 20px;
+  border-radius: 25px;
 }
