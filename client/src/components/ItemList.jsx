@@ -13,7 +13,7 @@ const ItemList = () => {
   return (
     <div>
       {items.map((item) => (
-        <div className="listItem" key={item.id}>
+        <div className="listItem" key={item._id}>
           <h3>{item.name}</h3>
           <img src={item.imageURL} alt={item.name} />
           <ItemDialog item={item} />

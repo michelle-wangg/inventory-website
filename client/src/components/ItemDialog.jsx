@@ -21,13 +21,19 @@ const ItemDialog = ({ item }) => {
   };
 
   const subtractUnit = () => {
-    dispatch(subtractUnitAsync(item.id));
-    dispatch(getItemsAsync());
+    dispatch(subtractUnitAsync(item._id))
+    .then(() => dispatch(getItemsAsync()))
+    .catch((error) => {
+      console.error("Error removing item:", error);
+    });
   };
 
   const addUnit = () => {
-    dispatch(addUnitAsync(item.id));
-    dispatch(getItemsAsync());
+    dispatch(addUnitAsync(item._id))
+    .then(() => dispatch(getItemsAsync()))
+    .catch((error) => {
+      console.error("Error removing item:", error);
+    });
   };
 
   const removeItem = () => {

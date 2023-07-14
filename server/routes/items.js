@@ -20,7 +20,7 @@ router.get("/:id", async (req, res) => {
     if (item) {
       res.status(200).send(item);
     } else {
-      res.status(400).send({error: "Item not found"});
+      res.status(400).send({ error: "Item not found" });
     }
   } catch (error) {
     console.error(error);
@@ -30,13 +30,13 @@ router.get("/:id", async (req, res) => {
 
 router.post("/", async (req, res) => {
   try {
-    console.log(req.body.item.description)
+    console.log(req.body.item.description);
     const newItem = new Item({
       name: req.body.item.name,
       description: req.body.item.description,
       price: req.body.item.price,
       unitsRemaining: req.body.item.unitsRemaining,
-      imageURL: req.body.item.imageURL
+      imageURL: req.body.item.imageURL,
     });
     const result = await newItem.save();
     res.status(200).send(result);
@@ -48,7 +48,7 @@ router.post("/", async (req, res) => {
 
 router.delete("/:id", async (req, res) => {
   try {
-    console.log(req.params)
+    console.log(req.params);
     const itemId = req.params.id;
 
     // Find and delete the item by ID
@@ -66,5 +66,46 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
+router.patch("/:id/subtractUnit", async (req, res) => {
+  try {
+    const foundItem = await Item.findById(req.params.id);
+    console.log("found item is" , foundItem)
+    console.log(foundItem)
+
+    if (!foundItem) return res.status(404).send({ message: "Item not found" });
+
+    foundItem.unitsRemaining = Number(foundItem.unitsRemaining - 1);
+
+    const updatedItem = await foundItem.save();
+
+    if (updatedItem.unitsRemaining <= 0) {
+      const updatedItem = await Item.findByIdAndDelete(req.params.id);
+    }
+    return res.send(updatedItem);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to subtract unit from item" });
+  }
+});
+
+router.patch("/:id/addUnit", async (req, res) => {
+  try {
+    const foundItem = await Item.findById(req.params.id);
+    console.log("found item is" , foundItem)
+    console.log(foundItem)
+
+    if (!foundItem) return res.status(404).send({ message: "Item not found" });
+
+    foundItem.unitsRemaining = Number(Number(foundItem.unitsRemaining) + Number(1));
+
+    const updatedItem = await foundItem.save();
+
+    if (updatedItem.unitsRemaining <= 0) {
+      const updatedItem = await Item.findByIdAndDelete(req.params.id);
+    }
+    return res.send(updatedItem);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to subtract unit from item" });
+  }
+});
 
 export default router;
