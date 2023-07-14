@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 const { Schema } = mongoose;
 
 // create schema
-const itemsSchema = new Schema({
+const itemSchema = new Schema({
     name: {
         type: String,
         required: true,
@@ -26,6 +26,6 @@ const itemsSchema = new Schema({
 });
 
 // create model
-const Item = mongoose.model('Item', itemsSchema);
+const Item = mongoose.model("Item", itemSchema);
 
 export default Item;

@@ -1,47 +1,38 @@
 const addItem = async (item) => {
-  const response = await fetch('http://localhost:3001/items', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(item),
-  });
+  try {
+    const response = await fetch('http://localhost:5050/items', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(item),
+    });
 
-  const data = await response.json();
-  if (!response.ok) {
-    const errorMsg = data?.message;
-    throw new Error(errorMsg);
+    const data = await response.json();
+    if (!response.ok) {
+      const errorMsg = data?.message;
+      throw new Error(errorMsg);
+    }
+    return data;
+  } catch (err) {
+    console.error("error adding item: ", err);
+    throw err;
   }
-  return data;
 };
 
-const getItems = async (options) => {
-  let url = 'http://localhost:3001/items';
-  if (options) {
-    const { sortBy, filterBy } = options;
-    const params = new URLSearchParams();
-
-    if (sortBy) {
-      params.append('sortBy', sortBy);
-    }
-
-    if (filterBy) {
-      Object.entries(filterBy).forEach(([key, value]) => {
-        params.append(key, value);
-      });
-    }
-
-    url += `?${params.toString()}`;
+const getItems = async () => {
+  try {
+    const response = await fetch('http://localhost:5050/items');
+    const items = await response.json();
+    return items;
+  } catch (error) {
+    console.error('Error fetching items:', error);
+    throw error;
   }
-
-  const response = await fetch(url, {
-    method: 'GET',
-  });
-  return response.json();
 };
 
 const deleteItem = async (id) => {
-  const response = await fetch(`http://localhost:3001/items/${id}`, {
+  const response = await fetch(`http://localhost:5050/items/${id}`, {
     method: 'DELETE',
   });
 
@@ -54,7 +45,7 @@ const deleteItem = async (id) => {
 
 const addUnit = async (id) => {
   const response = await fetch(
-    `http://localhost:3001/items/${id}/addUnit`,
+    `http://localhost:5050/items/${id}/addUnit`,
     {
       method: 'PATCH',
     }
@@ -69,7 +60,7 @@ const addUnit = async (id) => {
 
 const subtractUnit = async (id) => {
   const response = await fetch(
-    `http://localhost:3001/items/${id}/subtractUnit`,
+    `http://localhost:5050/items/${id}/subtractUnit`,
     {
       method: 'PATCH',
     }

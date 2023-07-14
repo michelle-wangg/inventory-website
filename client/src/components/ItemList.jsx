@@ -1,44 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import ItemDialog from "./ItemDialog";
+import { getItemsAsync } from "../redux/items/thunks";
 
 const ItemList = () => {
-  const [items, setItems] = useState([]);
+  const items = useSelector((state) => state.items.list);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    const fetchItems = async () => {
-      try {
-        const response = await fetch("http://localhost:5050/items");
-        if (response.ok) {
-          const data = await response.json();
-          setItems(data);
-        } else {
-          throw new Error("Error fetching items");
-        }
-      } catch (error) {
-        console.error("Error fetching items:", error);
-      }
-    };
-
-    fetchItems();
-  }, []);
+    dispatch(getItemsAsync())}, []);
 
   return (
     <div>
-      <h1>Item List</h1>
-      {items.length === 0 ? (
-        <p>No items found.</p>
-      ) : (
-        <ul>
-          {items.map((item) => (
-            <li key={item._id}>
-              <h3>{item.name}</h3>
-              <p>{item.description}</p>
-              <p>Price: {item.price}</p>
-              <p>Units Remaining: {item.unitsRemaining}</p>
-              <img src={item.imageURL} alt={item.name} />
-            </li>
-          ))}
-        </ul>
-      )}
+      {items.map((item) => (
+        <div className="listItem" key={item.id}>
+          <h3>{item.name}</h3>
+          <img src={item.imageURL} alt={item.name} />
+          <ItemDialog item={item} />
+        </div>
+      ))}
     </div>
   );
 };
