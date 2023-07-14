@@ -20,13 +20,17 @@ const addItem = async (item) => {
   }
 };
 
-const getItems = async () => {
+const getItems = async (search) => {
   try {
-    const response = await fetch('http://localhost:5050/items');
+    let url = 'http://localhost:5050/items';
+    if (search) {
+      url += `?search=${encodeURIComponent(search)}`;
+    }
+    const response = await fetch(url);
     const items = await response.json();
     return items;
   } catch (error) {
-    console.error('Error fetching items:', error);
+    console.error("Error getting items:", error);
     throw error;
   }
 };
