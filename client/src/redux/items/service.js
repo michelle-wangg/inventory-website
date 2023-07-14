@@ -40,8 +40,8 @@ const getItems = async (options) => {
   return response.json();
 };
 
-const deleteItem = async (itemId) => {
-  const response = await fetch(`http://localhost:3001/items/${itemId}`, {
+const deleteItem = async (id) => {
+  const response = await fetch(`http://localhost:3001/items/${id}`, {
     method: 'DELETE',
   });
 
@@ -52,9 +52,9 @@ const deleteItem = async (itemId) => {
   }
 };
 
-const addUnit = async (itemId) => {
+const addUnit = async (id) => {
   const response = await fetch(
-    `http://localhost:3001/items/${itemId}/addUnit`,
+    `http://localhost:3001/items/${id}/addUnit`,
     {
       method: 'PATCH',
     }
@@ -67,9 +67,9 @@ const addUnit = async (itemId) => {
   }
 };
 
-const subtractUnit = async (itemId) => {
+const subtractUnit = async (id) => {
   const response = await fetch(
-    `http://localhost:3001/items/${itemId}/subtractUnit`,
+    `http://localhost:3001/items/${id}/subtractUnit`,
     {
       method: 'PATCH',
     }

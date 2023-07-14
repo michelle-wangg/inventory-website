@@ -60,9 +60,9 @@ const itemsSlice = createSlice({
       .addCase(addUnitAsync.fulfilled, (state, action) => {
         state.addUnit = REQUEST_STATE.FULFILLED;
         // Update the unit count of the corresponding item in the list
-        const itemId = action.payload.itemId;
+        const id = action.payload.id;
         const unitsToAdd = action.payload.unitsToAdd;
-        const itemIndex = state.list.findIndex((item) => item.id === itemId);
+        const itemIndex = state.list.findIndex((item) => item.id === id);
         if (itemIndex !== -1) {
           state.list[itemIndex].unitsRemaining += unitsToAdd;
         }

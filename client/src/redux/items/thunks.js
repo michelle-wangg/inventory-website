@@ -18,25 +18,25 @@ export const addItemAsync = createAsyncThunk(
 
 export const deleteItemAsync = createAsyncThunk(
   actionTypes.DELETE_ITEM,
-  async (itemId) => {
-    await ItemService.deleteItem(itemId);
-    return itemId;
+  async (id) => {
+    await ItemService.deleteItem(id);
+    return id;
   }
 );
 
 export const addUnitAsync = createAsyncThunk(
   actionTypes.ADD_UNIT,
-  async (itemId) => {
-    await ItemService.addUnit(itemId);
-    return itemId;
+  async (id) => {
+    await ItemService.addUnit(id);
+    return id;
   }
 );
 
 export const subtractUnitAsync = createAsyncThunk(
   actionTypes.SUBTRACT_UNIT,
-  async (itemId) => {
-    await ItemService.subtractUnit(itemId);
-    return itemId;
+  async (id) => {
+    await ItemService.subtractUnit(id);
+    return id;
   }
 );
 

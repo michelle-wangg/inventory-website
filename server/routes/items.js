@@ -1,152 +1,147 @@
-var express = require('express');
-var router = express.Router();
-const { v4: uuid } = require('uuid');
+import express from "express";
+import Item from "../models/item.js";
 
-const items = [
-  {
-    id: uuid(),
-    name: "apple",
-    description: "cold and crunchy",
-    price: 5,
-    unitsRemaining: 5,
-    imageURL: "https://www.applesfromny.com/wp-content/uploads/2020/06/SnapdragonNEW.png",
-  },
-  {
-    id: uuid(),
-    name: "pear",
-    description: "tasty and sweet",
-    price: 6,
-    unitsRemaining: 55,
-    imageURL: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Pears.jpg/440px-Pears.jpg",
-  },
-  {
-    id: uuid(),
-    name: "strawberry",
-    description: "taste of summer",
-    price: 2,
-    unitsRemaining: 1,
-    imageURL: "https://hips.hearstapps.com/clv.h-cdn.co/assets/15/22/1432670258-strawberry-facts2.jpg?resize=980:*",
-  },
-];
+const router = express.Router();
 
+/**
+ * GET /sessions
+ * Gets a list of all the sessions.
+ *
+ * Request body parameters:
+ * - none
+ *
+ * Returns:
+ * - An array containing all the session objects in the database.
+ */
+router.get("/", async (req, res) => {
+  try {
+    const items = await Item.find({});
+    res.status(200).send(items);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error });
+  }
+});
 
-/* GET items listing. */
-router.get('/', function (req, res, next) {
-  let sortedItems = items.slice(); // Create a copy of the items array
+/**
+ * GET /sessions/:id
+ * Gets a session with the specified ID.
+ *
+ * URL parameter:
+ * - id (string): The ID of the session to retrieve.
+ *
+ * Returns:
+ * - If the session is found, returns the session object.
+ * - If the session is not found, returns a 404 status code.
+ **/
+router.get("/:id", async (req, res) => {
+  try {
+    const session = await Item.findById(req.params.id);
 
-  // Sorting
-  const sortBy = req.query.sortBy;
-  const sortOrder = req.query.sortOrder === 'desc' ? -1 : 1;
-  if (sortBy) {
-    sortedItems.sort((a, b) => {
-      if (a[sortBy] < b[sortBy]) {
-        return -1 * sortOrder;
-      }
-      if (a[sortBy] > b[sortBy]) {
-        return 1 * sortOrder;
-      }
-      return 0;
+    if (session) {
+      res.status(200).send(session);
+    } else {
+      res.status(400).send({error: "Session not found"});
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error });
+  }
+});
+
+/**
+ * POST /sessions
+ * Creates a new game session.
+ *
+ * Request body parameters:
+ * - isPublic (boolean): Determines if the session is public.
+ * - status (string): The current status of the session. One of "waiting", "ongoing", "completed", or "cancelled".
+ * - players (string array): Initializes the players array with host ID.
+ *
+ * Returns:
+ * - A JSON object of newly created session.
+ */
+router.post("/", async (req, res) => {
+  try {
+    const newItem = new Item({
+      name: req.body.name,
+      description: req.body.description,
+      price: req.body.price,
+      unitsRemaining: req.body.unitsRemaining,
+      imageURL: req.body.imageURL
     });
+    const result = await newItem.save();
+    res.status(200).send(result);
+  } catch (error) {
+    console.error("something went wrong", error);
+    res.status(500).send({ error });
   }
+});
 
-  // Searching
-  const searchQuery = req.query.searchQuery;
-  if (searchQuery) {
-    sortedItems = sortedItems.filter(item =>
-      item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.description.toLowerCase().includes(searchQuery.toLowerCase())
+/**
+ * PATCH /:id/add-player
+ * Add a user to the player list of a session with given ID.
+ *
+ * URL parameters:
+ * - id (string): The ID of the session to update.
+ *
+ * Request body parameters:
+ * - id (string): the ID of the user to be added.
+ *
+ * Returns:
+ * - A JSON object with a single property, publicUrl, containing the public URL of the uploaded file.
+ */
+router.patch("/:id/add-player", async (req, res) => {
+  try {
+    
+    const result = await Item.updateOne(
+      { _id: req.params.id },
+      { $push: { players: req.id } }
     );
-  }
 
-  return res.send(sortedItems);
+    if (result.nModified === 0) {
+      return res.status(404).send({ error: "No session found with given id" });
+    }
+
+    return res.status(200).send(req.body.id);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send(error);
+  }
 });
 
-router.get("/:itemId", function (req, res, next) {
-  const foundItem = items.find(item => item.id === req.params.itemId);
+/**
+ * PATCH /:id/upload-drawing
+ * Uploads the session's drawing to Google Cloud Storage and updates the session's finalImage string with the public URL of the uploaded file.
+ *
+ * URL parameters:
+ * - id (string): The ID of the session to update.
+ *
+ * Request body parameters:
+ * - A multipart/form-data payload with a key of "img" and the value being the file to be uploaded.
+ *
+ * Returns:
+ * - A JSON object with a single property, publicUrl, containing the public URL of the uploaded file.
+ */
+router.patch("/:id/upload-drawing", async (req, res) => {
+  try {
+    const imageUploadService = new ImageUploadService();
+    const publicUrl = await imageUploadService.uploadFile(req, "drawings");
 
-  if (!foundItem) return res.status(404).send({ message: 'Item not found' });
+    const result = await Item.updateOne(
+      { _id: req.params.id },
+      { $set: { finalImage: publicUrl } }
+    );
 
-  return res.send(foundItem);
-})
+    if (result.nModified === 0) {
+      return res.status(404).send({ error: "No session found with given id" });
+    }
 
-router.post('/', function (req, res, next) {
-  console.log(req)
-  console.log(req.body.item)
-  const itemToBeAdded = req.body.item
-  if (!itemToBeAdded.name) {
-    console.log("missing name");
-    return res.status(400).send({ message: 'Item must have a name!' });
+    return res.status(200).send({ publicUrl });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send(error);
   }
-  if (!itemToBeAdded.description) {
-    console.log("missing description");
-    return res.status(400).send({ message: 'Item must have a description!' });
-  }
-  if (!itemToBeAdded.price) {
-    console.log("missing price");
-    return res.status(400).send({ message: 'Item must have a price!' });
-  }
-  if (!itemToBeAdded.unitsRemaining) {
-    console.log("missing unitsRemaining");
-    return res.status(400).send({ message: 'Item must have units remaining!' });
-  }
-  if (!itemToBeAdded.imageURL) {
-    console.log("missing imageURL");
-    return res.status(400).send({ message: 'Item must have an imageURL!' });
-  }
-
-  const item = {
-    id: uuid(),
-    name: itemToBeAdded.name,
-    description: itemToBeAdded.description,
-    price: itemToBeAdded.price,
-    unitsRemaining: itemToBeAdded.unitsRemaining,
-    imageURL: itemToBeAdded.imageURL,
-  };
-  items.push(item);
-
-  // Send the added item in the response
-  return res.send(item);
 });
 
-
-router.delete('/:itemId', function(req, res, next) {
-  const foundIndex = items.findIndex((item) => item.id === req.params.itemId);
-
-  if (foundIndex === -1) {
-    return res.status(404).send({ message: 'Item not found' });
-  }
-
-  const deletedItem = items.splice(foundIndex, 1)[0];
-  return res.send(deletedItem);
-});
-
-router.patch('/:itemId/addUnit', function(req, res, next) {
-  const itemId = req.params.itemId;
-
-  const foundItem = items.find((item) => item.id === itemId);
-
-  if (!foundItem) return res.status(404).send({ message: 'Item not found' });
-
-  foundItem.unitsRemaining ++;
-
-  return res.send(foundItem);
-});
-
-router.patch('/:itemId/subtractUnit', function(req, res, next) {
-  const itemId = req.params.itemId;
-
-  const foundItem = items.find((item) => item.id === itemId);
-
-  if (!foundItem) return res.status(404).send({ message: 'Item not found' });
-
-  foundItem.unitsRemaining --;
-
-  if (foundItem.unitsRemaining <= 0) {
-    const index = items.findIndex(item => item.id === foundItem.id);
-    items.splice(index, 1)[0];
-  }
-  return res.send(foundItem);
-})
-
-module.exports = router;
-
+export default router;
