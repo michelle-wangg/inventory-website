@@ -20,11 +20,14 @@ const addItem = async (item) => {
   }
 };
 
-const getItems = async (search) => {
+const getItems = async (search, sort) => {
   try {
     let url = 'http://localhost:5050/items';
     if (search) {
       url += `?search=${encodeURIComponent(search)}`;
+    }
+    if (sort) {
+      url += `&sort=${encodeURIComponent(sort)}`;
     }
     const response = await fetch(url);
     const items = await response.json();

@@ -4,19 +4,25 @@ import Item from "../models/item.js";
 const router = express.Router();
 
 router.get('/', async (req, res) => {
+  const { search, sort } = req.query;
+  const filter = {};
+
+  if (search) {
+    // Add search condition if search parameter is provided
+    filter.name = { $regex: search, $options: 'i' };
+  }
+
+  let sortOptions = {};
+  if (sort === 'name') {
+    // Sort by name in ascending order
+    sortOptions = { name: 1 };
+  }
+
   try {
-    const searchName = req.query.search;
-
-    let query = {};
-
-    if (searchName) {
-      query.name = { $regex: searchName, $options: 'i' };
-    }
-
-    const items = await Item.find(query);
-    res.status(200).json(items);
+    const items = await Item.find(filter).sort(sortOptions);
+    res.json(items);
   } catch (error) {
-    console.error('Error getting items:', error);
+    console.error("Error getting items:", error);
     res.status(500).json({ error: 'Failed to get items' });
   }
 });
