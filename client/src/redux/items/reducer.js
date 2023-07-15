@@ -47,7 +47,7 @@ const itemsSlice = createSlice({
       })
       .addCase(deleteItemAsync.fulfilled, (state, action) => {
         state.deleteItem = REQUEST_STATE.FULFILLED;
-        state.list = state.list.filter((item) => item.id !== action.payload);
+        state.list = state.list.filter((item) => item._id !== action.payload);
       })
       .addCase(deleteItemAsync.rejected, (state, action) => {
         state.deleteItem = REQUEST_STATE.REJECTED;

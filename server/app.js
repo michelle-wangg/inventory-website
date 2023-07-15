@@ -3,7 +3,7 @@ import cors from "cors";
 import "./loadEnvironment.js";
 import mongoose from "mongoose";
 import items from "./routes/items.js";
-import data from "./routes/generate-data.js"
+// import data from "./routes/generate-data.js"
 import "./loadEnvironment.js";
 
 const PORT = process.env.PORT || 5050;
@@ -38,4 +38,4 @@ await mongoose
     throw new Error("Failed to connect to the database.");
   });
 
-data();
+// data();

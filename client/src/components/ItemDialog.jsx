@@ -9,7 +9,6 @@ import {
 
 const ItemDialog = ({ item }) => {
   const [isOpen, setIsOpen] = useState(false);
-
   const dispatch = useDispatch();
 
   const openDialog = () => {
@@ -20,28 +19,31 @@ const ItemDialog = ({ item }) => {
     setIsOpen(false);
   };
 
-  const subtractUnit = () => {
-    dispatch(subtractUnitAsync(item._id))
-    .then(() => dispatch(getItemsAsync()))
-    .catch((error) => {
-      console.error("Error removing item:", error);
-    });
+  const subtractUnit = async () => {
+    try {
+      await dispatch(subtractUnitAsync(item._id));
+      dispatch(getItemsAsync());
+    } catch (error) {
+      console.error("Error subtracting unit:", error);
+    }
   };
 
-  const addUnit = () => {
-    dispatch(addUnitAsync(item._id))
-    .then(() => dispatch(getItemsAsync()))
-    .catch((error) => {
-      console.error("Error removing item:", error);
-    });
+  const addUnit = async () => {
+    try {
+      await dispatch(addUnitAsync(item._id));
+      dispatch(getItemsAsync());
+    } catch (error) {
+      console.error("Error adding unit:", error);
+    }
   };
 
-  const removeItem = () => {
-    dispatch(deleteItemAsync(item._id))
-      .then(() => dispatch(getItemsAsync()))
-      .catch((error) => {
-        console.error("Error removing item:", error);
-      });
+  const removeItem = async () => {
+    try {
+      await dispatch(deleteItemAsync(item._id));
+      dispatch(getItemsAsync());
+    } catch (error) {
+      console.error("Error removing item:", error);
+    }
   };
 
   return (

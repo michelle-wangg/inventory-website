@@ -3,8 +3,8 @@ import image from "./images/pfp.jpg";
 
 const About = () => {
   return (
-    <div class="about">
-      <div class="about-me">
+    <div className="about">
+      <div className="about-me">
         <h2>About Me</h2>
         <img src={image} alt="profile" id="pfp" />
         <p>
@@ -12,7 +12,7 @@ const About = () => {
           currently on co-op.
         </p>
       </div>
-      <div class="about-project">
+      <div className="about-project">
         <h2>About the Project</h2>
         <p>
           StorageManager is the go to web application that allows you to keep

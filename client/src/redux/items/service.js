@@ -15,7 +15,7 @@ const addItem = async (item) => {
     }
     return data;
   } catch (err) {
-    console.error("error adding item: ", err);
+    console.error("Error adding item: ", err);
     throw err;
   }
 };
@@ -36,66 +36,74 @@ const getItems = async (search) => {
 };
 
 const deleteItem = async (id) => {
-  const response = await fetch(`http://localhost:5050/items/${id}`, {
-    method: 'DELETE',
-  });
+  try {
+    const response = await fetch(`http://localhost:5050/items/${id}`, {
+      method: 'DELETE',
+    });
 
-  if (!response.ok) {
-    const data = await response.json();
-    const errorMsg = data?.message;
-    throw new Error(errorMsg);
+    if (!response.ok) {
+      const data = await response.json();
+      const errorMsg = data?.message;
+      throw new Error(errorMsg);
+    }
+  } catch (error) {
+    console.error("Error deleting item:", error);
+    throw error;
   }
 };
 
 const addUnit = async (id) => {
-  const response = await fetch(
-    `http://localhost:5050/items/${id}/addUnit`,
-    {
-      method: 'PATCH',
-    }
-  );
+  try {
+    const response = await fetch(
+      `http://localhost:5050/items/${id}/addUnit`,
+      {
+        method: 'PATCH',
+      }
+    );
 
-  if (!response.ok) {
-    const data = await response.json();
-    const errorMsg = data?.message;
-    throw new Error(errorMsg);
+    if (!response.ok) {
+      const data = await response.json();
+      const errorMsg = data?.message;
+      throw new Error(errorMsg);
+    }
+  } catch (error) {
+    console.error("Error adding unit:", error);
+    throw error;
   }
 };
 
 const subtractUnit = async (id) => {
-  const response = await fetch(
-    `http://localhost:5050/items/${id}/subtractUnit`,
-    {
-      method: 'PATCH',
-    }
-  );
+  try {
+    const response = await fetch(
+      `http://localhost:5050/items/${id}/subtractUnit`,
+      {
+        method: 'PATCH',
+      }
+    );
 
-  if (!response.ok) {
-    const data = await response.json();
-    const errorMsg = data?.message;
-    throw new Error(errorMsg);
+    if (!response.ok) {
+      const data = await response.json();
+      const errorMsg = data?.message;
+      throw new Error(errorMsg);
+    }
+  } catch (error) {
+    console.error("Error subtracting unit:", error);
+    throw error;
   }
 };
 
 const searchItems = async (query) => {
-  const items = await getItems(); // Get all items
-
-  if (!query) {
-    return items; // Return all items if no query provided
+  try {
+    const response = await fetch(`http://localhost:5050/items/search?query=${encodeURIComponent(query)}`);
+    const searchResults = await response.json();
+    return searchResults;
+  } catch (error) {
+    console.error("Error searching items:", error);
+    throw error;
   }
-
-  // Search for items based on the provided query
-  const searchResults = items.filter(
-    (item) =>
-      item.name.toLowerCase().includes(query.toLowerCase()) ||
-      item.description.toLowerCase().includes(query.toLowerCase())
-  );
-
-  return searchResults;
 };
 
-
-export default {
+const ItemService = {
   addItem,
   getItems,
   deleteItem,
@@ -103,3 +111,5 @@ export default {
   subtractUnit,
   searchItems,
 };
+
+export default ItemService;
