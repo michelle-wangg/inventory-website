@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import "../styles.css";
 import { useDispatch } from "react-redux";
-import { addItemAsync } from "../redux/items/thunks";
+import { addItemAsync, getItemsAsync } from "../redux/items/thunks";
 
 export const ItemForm = () => {
-  const [itemName, setItemName] = useState("");
+  const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [unitsRemaining, setUnitsRemaining] = useState("");
@@ -16,7 +16,7 @@ export const ItemForm = () => {
     e.preventDefault();
     // Create an item object using the form data
     const item = {
-      name: itemName,
+      name: name,
       description: description,
       price: price,
       unitsRemaining: unitsRemaining,
@@ -24,18 +24,17 @@ export const ItemForm = () => {
     };
     // Pass the item object to the parent component's addItem function
     dispatch(addItemAsync(item));
-    // Reset the form inputs
     handleClear();
   };
 
   function handleClear() {
     // Reset the form inputs
-    setItemName("");
+    setName("");
     setDescription("");
     setPrice("");
     setUnitsRemaining("");
     setImageUrl("");
-  };
+  }
 
   return (
     <div className="addItem">
@@ -44,8 +43,8 @@ export const ItemForm = () => {
           Item Name:
           <input
             type="text"
-            value={itemName}
-            onChange={(e) => setItemName(e.target.value)}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             required
           />
         </label>
@@ -92,7 +91,7 @@ export const ItemForm = () => {
           />
         </label>
         <br />
-        <div className='buttons'>
+        <div className="buttons">
           <button type="submit">Add Item</button>
           <button type="button" onClick={handleClear}>
             Clear

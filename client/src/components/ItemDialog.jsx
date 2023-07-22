@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { deleteItemAsync, addUnitAsync, getItemsAsync, subtractUnitAsync } from "../redux/items/thunks";
+import {
+  deleteItemAsync,
+  addUnitAsync,
+  getItemsAsync,
+  subtractUnitAsync,
+} from "../redux/items/thunks";
 
 const ItemDialog = ({ item }) => {
   const [isOpen, setIsOpen] = useState(false);
-
   const dispatch = useDispatch();
 
   const openDialog = () => {
@@ -15,19 +19,31 @@ const ItemDialog = ({ item }) => {
     setIsOpen(false);
   };
 
-  const subtractUnit = () => {
-    dispatch(subtractUnitAsync(item.id));
-    dispatch(getItemsAsync());
+  const subtractUnit = async () => {
+    try {
+      await dispatch(subtractUnitAsync(item._id));
+      dispatch(getItemsAsync());
+    } catch (error) {
+      console.error("Error subtracting unit:", error);
+    }
   };
 
-  const addUnit = () => {
-    dispatch(addUnitAsync(item.id));
-    dispatch(getItemsAsync());
-
+  const addUnit = async () => {
+    try {
+      await dispatch(addUnitAsync(item._id));
+      dispatch(getItemsAsync());
+    } catch (error) {
+      console.error("Error adding unit:", error);
+    }
   };
 
-  const removeItem = () => {
-    dispatch(deleteItemAsync(item.id));
+  const removeItem = async () => {
+    try {
+      await dispatch(deleteItemAsync(item._id));
+      dispatch(getItemsAsync());
+    } catch (error) {
+      console.error("Error removing item:", error);
+    }
   };
 
   return (
@@ -40,9 +56,15 @@ const ItemDialog = ({ item }) => {
           <p>Price: ${item.price}</p>
           <p>Units Remaining: {item.unitsRemaining}</p>
 
-          <button type="submit" onClick={subtractUnit}> - </button>
+          <button type="submit" onClick={subtractUnit}>
+            {" "}
+            -{" "}
+          </button>
           <button onClick={closeDialog}>Close</button>
-          <button type="submit" onClick={addUnit}> + </button>
+          <button type="submit" onClick={addUnit}>
+            {" "}
+            +{" "}
+          </button>
         </div>
       )}
     </div>

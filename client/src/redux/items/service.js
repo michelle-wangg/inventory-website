@@ -1,106 +1,112 @@
 const addItem = async (item) => {
-  const response = await fetch('http://localhost:3001/items', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(item),
-  });
+  try {
+    const response = await fetch('http://localhost:5050/items', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(item),
+    });
 
-  const data = await response.json();
-  if (!response.ok) {
-    const errorMsg = data?.message;
-    throw new Error(errorMsg);
-  }
-  return data;
-};
-
-const getItems = async (options) => {
-  let url = 'http://localhost:3001/items';
-  if (options) {
-    const { sortBy, filterBy } = options;
-    const params = new URLSearchParams();
-
-    if (sortBy) {
-      params.append('sortBy', sortBy);
-    }
-
-    if (filterBy) {
-      Object.entries(filterBy).forEach(([key, value]) => {
-        params.append(key, value);
-      });
-    }
-
-    url += `?${params.toString()}`;
-  }
-
-  const response = await fetch(url, {
-    method: 'GET',
-  });
-  return response.json();
-};
-
-const deleteItem = async (itemId) => {
-  const response = await fetch(`http://localhost:3001/items/${itemId}`, {
-    method: 'DELETE',
-  });
-
-  if (!response.ok) {
     const data = await response.json();
-    const errorMsg = data?.message;
-    throw new Error(errorMsg);
+    if (!response.ok) {
+      const errorMsg = data?.message;
+      throw new Error(errorMsg);
+    }
+    return data;
+  } catch (err) {
+    console.error("Error adding item: ", err);
+    throw err;
   }
 };
 
-const addUnit = async (itemId) => {
-  const response = await fetch(
-    `http://localhost:3001/items/${itemId}/addUnit`,
-    {
-      method: 'PATCH',
+const getItems = async (search, sort) => {
+  try {
+    let url = 'http://localhost:5050/items';
+    if (search) {
+      url += `?search=${encodeURIComponent(search)}`;
     }
-  );
-
-  if (!response.ok) {
-    const data = await response.json();
-    const errorMsg = data?.message;
-    throw new Error(errorMsg);
+    if (sort) {
+      url += `&sort=${encodeURIComponent(sort)}`;
+    }
+    const response = await fetch(url);
+    const items = await response.json();
+    return items;
+  } catch (error) {
+    console.error("Error getting items:", error);
+    throw error;
   }
 };
 
-const subtractUnit = async (itemId) => {
-  const response = await fetch(
-    `http://localhost:3001/items/${itemId}/subtractUnit`,
-    {
-      method: 'PATCH',
-    }
-  );
+const deleteItem = async (id) => {
+  try {
+    const response = await fetch(`http://localhost:5050/items/${id}`, {
+      method: 'DELETE',
+    });
 
-  if (!response.ok) {
-    const data = await response.json();
-    const errorMsg = data?.message;
-    throw new Error(errorMsg);
+    if (!response.ok) {
+      const data = await response.json();
+      const errorMsg = data?.message;
+      throw new Error(errorMsg);
+    }
+  } catch (error) {
+    console.error("Error deleting item:", error);
+    throw error;
+  }
+};
+
+const addUnit = async (id) => {
+  try {
+    const response = await fetch(
+      `http://localhost:5050/items/${id}/addUnit`,
+      {
+        method: 'PATCH',
+      }
+    );
+
+    if (!response.ok) {
+      const data = await response.json();
+      const errorMsg = data?.message;
+      throw new Error(errorMsg);
+    }
+  } catch (error) {
+    console.error("Error adding unit:", error);
+    throw error;
+  }
+};
+
+const subtractUnit = async (id) => {
+  try {
+    const response = await fetch(
+      `http://localhost:5050/items/${id}/subtractUnit`,
+      {
+        method: 'PATCH',
+      }
+    );
+
+    if (!response.ok) {
+      const data = await response.json();
+      const errorMsg = data?.message;
+      throw new Error(errorMsg);
+    }
+  } catch (error) {
+    console.error("Error subtracting unit:", error);
+    throw error;
   }
 };
 
 const searchItems = async (query) => {
-  const items = await getItems(); // Get all items
-
-  if (!query) {
-    return items; // Return all items if no query provided
+  try {
+    const response = await fetch(`http://localhost:5050/items/search?query=${encodeURIComponent(query)}`);
+    const searchResults = await response.json();
+    return searchResults;
+  } catch (error) {
+    console.error("Error searching items:", error);
+    throw error;
   }
-
-  // Search for items based on the provided query
-  const searchResults = items.filter(
-    (item) =>
-      item.name.toLowerCase().includes(query.toLowerCase()) ||
-      item.description.toLowerCase().includes(query.toLowerCase())
-  );
-
-  return searchResults;
 };
 
-
-export default {
+const ItemService = {
   addItem,
   getItems,
   deleteItem,
@@ -108,3 +114,5 @@ export default {
   subtractUnit,
   searchItems,
 };
+
+export default ItemService;

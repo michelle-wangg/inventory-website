@@ -1,152 +1,125 @@
-var express = require('express');
-var router = express.Router();
-const { v4: uuid } = require('uuid');
+import express from "express";
+import Item from "../models/item.js";
 
-const items = [
-  {
-    id: uuid(),
-    name: "apple",
-    description: "cold and crunchy",
-    price: 5,
-    unitsRemaining: 5,
-    imageURL: "https://www.applesfromny.com/wp-content/uploads/2020/06/SnapdragonNEW.png",
-  },
-  {
-    id: uuid(),
-    name: "pear",
-    description: "tasty and sweet",
-    price: 6,
-    unitsRemaining: 55,
-    imageURL: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Pears.jpg/440px-Pears.jpg",
-  },
-  {
-    id: uuid(),
-    name: "strawberry",
-    description: "taste of summer",
-    price: 2,
-    unitsRemaining: 1,
-    imageURL: "https://hips.hearstapps.com/clv.h-cdn.co/assets/15/22/1432670258-strawberry-facts2.jpg?resize=980:*",
-  },
-];
+const router = express.Router();
 
+router.get('/', async (req, res) => {
+  const { search, sort } = req.query;
+  const filter = {};
 
-/* GET items listing. */
-router.get('/', function (req, res, next) {
-  let sortedItems = items.slice(); // Create a copy of the items array
+  if (search) {
+    // Add search condition if search parameter is provided
+    filter.name = { $regex: search, $options: 'i' };
+  }
 
-  // Sorting
-  const sortBy = req.query.sortBy;
-  const sortOrder = req.query.sortOrder === 'desc' ? -1 : 1;
-  if (sortBy) {
-    sortedItems.sort((a, b) => {
-      if (a[sortBy] < b[sortBy]) {
-        return -1 * sortOrder;
-      }
-      if (a[sortBy] > b[sortBy]) {
-        return 1 * sortOrder;
-      }
-      return 0;
+  let sortOptions = {};
+  if (sort === 'name') {
+    // Sort by name in ascending order
+    sortOptions = { name: 1 };
+  }
+
+  try {
+    const items = await Item.find(filter).sort(sortOptions);
+    res.json(items);
+  } catch (error) {
+    console.error("Error getting items:", error);
+    res.status(500).json({ error: 'Failed to get items' });
+  }
+});
+
+router.get("/:id", async (req, res) => {
+  try {
+    const item = await Item.findById(req.params.id);
+
+    if (item) {
+      res.status(200).send(item);
+    } else {
+      res.status(400).send({ error: "Item not found" });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error });
+  }
+});
+
+router.post("/", async (req, res) => {
+  try {
+    console.log(req.body.item.description);
+    const newItem = new Item({
+      name: req.body.item.name,
+      description: req.body.item.description,
+      price: req.body.item.price,
+      unitsRemaining: req.body.item.unitsRemaining,
+      imageURL: req.body.item.imageURL,
     });
+    const result = await newItem.save();
+    res.status(200).send(result);
+  } catch (error) {
+    console.error("something went wrong", error);
+    res.status(500).send({ error });
   }
-
-  // Searching
-  const searchQuery = req.query.searchQuery;
-  if (searchQuery) {
-    sortedItems = sortedItems.filter(item =>
-      item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.description.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-  }
-
-  return res.send(sortedItems);
 });
 
-router.get("/:itemId", function (req, res, next) {
-  const foundItem = items.find(item => item.id === req.params.itemId);
+router.delete("/:id", async (req, res) => {
+  try {
+    console.log(req.params);
+    const itemId = req.params.id;
 
-  if (!foundItem) return res.status(404).send({ message: 'Item not found' });
+    // Find and delete the item by ID
+    const deletedItem = await Item.findByIdAndDelete(itemId);
 
-  return res.send(foundItem);
-})
+    if (!deletedItem) {
+      // Item not found
+      return res.status(404).json({ error: "Item not found" });
+    }
 
-router.post('/', function (req, res, next) {
-  console.log(req)
-  console.log(req.body.item)
-  const itemToBeAdded = req.body.item
-  if (!itemToBeAdded.name) {
-    console.log("missing name");
-    return res.status(400).send({ message: 'Item must have a name!' });
+    res.status(200).json(deletedItem); // Respond with the deleted item
+  } catch (error) {
+    console.error("Error deleting item:", error);
+    res.status(500).json({ error: "Failed to delete item" });
   }
-  if (!itemToBeAdded.description) {
-    console.log("missing description");
-    return res.status(400).send({ message: 'Item must have a description!' });
-  }
-  if (!itemToBeAdded.price) {
-    console.log("missing price");
-    return res.status(400).send({ message: 'Item must have a price!' });
-  }
-  if (!itemToBeAdded.unitsRemaining) {
-    console.log("missing unitsRemaining");
-    return res.status(400).send({ message: 'Item must have units remaining!' });
-  }
-  if (!itemToBeAdded.imageURL) {
-    console.log("missing imageURL");
-    return res.status(400).send({ message: 'Item must have an imageURL!' });
-  }
-
-  const item = {
-    id: uuid(),
-    name: itemToBeAdded.name,
-    description: itemToBeAdded.description,
-    price: itemToBeAdded.price,
-    unitsRemaining: itemToBeAdded.unitsRemaining,
-    imageURL: itemToBeAdded.imageURL,
-  };
-  items.push(item);
-
-  // Send the added item in the response
-  return res.send(item);
 });
 
+router.patch("/:id/subtractUnit", async (req, res) => {
+  try {
+    const foundItem = await Item.findById(req.params.id);
+    console.log("found item is" , foundItem)
+    console.log(foundItem)
 
-router.delete('/:itemId', function(req, res, next) {
-  const foundIndex = items.findIndex((item) => item.id === req.params.itemId);
+    if (!foundItem) return res.status(404).send({ message: "Item not found" });
 
-  if (foundIndex === -1) {
-    return res.status(404).send({ message: 'Item not found' });
+    foundItem.unitsRemaining = Number(foundItem.unitsRemaining - 1);
+
+    const updatedItem = await foundItem.save();
+
+    if (updatedItem.unitsRemaining <= 0) {
+      const updatedItem = await Item.findByIdAndDelete(req.params.id);
+    }
+    return res.send(updatedItem);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to subtract unit from item" });
   }
-
-  const deletedItem = items.splice(foundIndex, 1)[0];
-  return res.send(deletedItem);
 });
 
-router.patch('/:itemId/addUnit', function(req, res, next) {
-  const itemId = req.params.itemId;
+router.patch("/:id/addUnit", async (req, res) => {
+  try {
+    const foundItem = await Item.findById(req.params.id);
+    console.log("found item is" , foundItem)
+    console.log(foundItem)
 
-  const foundItem = items.find((item) => item.id === itemId);
+    if (!foundItem) return res.status(404).send({ message: "Item not found" });
 
-  if (!foundItem) return res.status(404).send({ message: 'Item not found' });
+    foundItem.unitsRemaining = Number(Number(foundItem.unitsRemaining) + Number(1));
 
-  foundItem.unitsRemaining ++;
+    const updatedItem = await foundItem.save();
 
-  return res.send(foundItem);
+    if (updatedItem.unitsRemaining <= 0) {
+      const updatedItem = await Item.findByIdAndDelete(req.params.id);
+    }
+    return res.send(updatedItem);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to subtract unit from item" });
+  }
 });
 
-router.patch('/:itemId/subtractUnit', function(req, res, next) {
-  const itemId = req.params.itemId;
-
-  const foundItem = items.find((item) => item.id === itemId);
-
-  if (!foundItem) return res.status(404).send({ message: 'Item not found' });
-
-  foundItem.unitsRemaining --;
-
-  if (foundItem.unitsRemaining <= 0) {
-    const index = items.findIndex(item => item.id === foundItem.id);
-    items.splice(index, 1)[0];
-  }
-  return res.send(foundItem);
-})
-
-module.exports = router;
-
+export default router;
