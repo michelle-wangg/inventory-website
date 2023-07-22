@@ -42,4 +42,6 @@ await mongoose
     throw new Error("Failed to connect to the database.");
   });
 
-data();
+app.get("/", (req, res) => {
+  res.status(200).json({message: "Connected to backend!"})
+})
