@@ -9,7 +9,11 @@ import "./loadEnvironment.js";
 const PORT = process.env.PORT || 5050;
 const app = express();
 
-app.use(cors());
+const corsOptions = {
+  origin: "https://storage-manager.onrender.com",
+}
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 app.get("/", (req, res) => {
