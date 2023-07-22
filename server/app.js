@@ -43,5 +43,5 @@ await mongoose
   });
 
 app.get("/", (req, res) => {
-  res.status(200).json({message: "Connected to backend!"})
+  res.status(201).json({message: "Connected to backend!"})
 })

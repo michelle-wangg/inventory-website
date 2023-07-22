@@ -1,6 +1,6 @@
 const addItem = async (item) => {
   try {
-    const response = await fetch('http://localhost:5050/items', {
+    const response = await fetch('https://inventory-website-cqbt.onrender.com/items', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -22,7 +22,7 @@ const addItem = async (item) => {
 
 const getItems = async (search, sort) => {
   try {
-    let url = 'http://localhost:5050/items';
+    let url = 'https://inventory-website-cqbt.onrender.com/items';
     if (search) {
       url += `?search=${encodeURIComponent(search)}`;
     }
@@ -40,7 +40,7 @@ const getItems = async (search, sort) => {
 
 const deleteItem = async (id) => {
   try {
-    const response = await fetch(`http://localhost:5050/items/${id}`, {
+    const response = await fetch(`https://inventory-website-cqbt.onrender.com/items/${id}`, {
       method: 'DELETE',
     });
 
@@ -58,7 +58,7 @@ const deleteItem = async (id) => {
 const addUnit = async (id) => {
   try {
     const response = await fetch(
-      `http://localhost:5050/items/${id}/addUnit`,
+      `https://inventory-website-cqbt.onrender.com/items/${id}/addUnit`,
       {
         method: 'PATCH',
       }
@@ -78,7 +78,7 @@ const addUnit = async (id) => {
 const subtractUnit = async (id) => {
   try {
     const response = await fetch(
-      `http://localhost:5050/items/${id}/subtractUnit`,
+      `https://inventory-website-cqbt.onrender.com/items/${id}/subtractUnit`,
       {
         method: 'PATCH',
       }
@@ -97,7 +97,7 @@ const subtractUnit = async (id) => {
 
 const searchItems = async (query) => {
   try {
-    const response = await fetch(`http://localhost:5050/items/search?query=${encodeURIComponent(query)}`);
+    const response = await fetch(`https://inventory-website-cqbt.onrender.com/items/search?query=${encodeURIComponent(query)}`);
     const searchResults = await response.json();
     return searchResults;
   } catch (error) {
