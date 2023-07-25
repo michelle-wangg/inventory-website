@@ -1,8 +1,6 @@
-// reducer.test.js
-
 import itemsReducer from '../items/reducer';
 import { addItemAsync, getItemsAsync, deleteItemAsync, addUnitAsync } from '../items/thunks';
-import { REQUEST_STATE } from '../utils'; // Assuming you have defined REQUEST_STATE
+import { REQUEST_STATE } from '../utils';
 
 describe('items reducer', () => {
   const initialState = {
@@ -29,7 +27,7 @@ describe('items reducer', () => {
   });
 
   it('should handle getItemsAsync.fulfilled', () => {
-    const fetchedItems = [{ _id: 'item-id-1', name: 'Item 1', description: 'Description 1', price: 10 }];
+    const fetchedItems = [{ _id: 'test-id-1', name: 'Item 1', description: 'Description 1', price: 10 }];
     expect(
       itemsReducer(initialState, getItemsAsync.fulfilled(fetchedItems))
     ).toEqual({
@@ -47,7 +45,7 @@ describe('items reducer', () => {
     ).toEqual({
       ...initialState,
       getItems: REQUEST_STATE.REJECTED,
-      error: rejectedAction.error, // Updated to use the error object from the action
+      error: rejectedAction.error,
     });
   });
 
@@ -62,7 +60,7 @@ describe('items reducer', () => {
   });
 
   it('should handle addItemAsync.fulfilled', () => {
-    const itemToAdd = { _id: 'item-id-123', name: 'New Item', description: 'Description', price: 10 };
+    const itemToAdd = { _id: 'test-id-1', name: 'New Item', description: 'Description', price: 10 };
     expect(
       itemsReducer(initialState, addItemAsync.fulfilled(itemToAdd))
     ).toEqual({
@@ -95,12 +93,12 @@ describe('items reducer', () => {
   });
 
   it('should handle deleteItemAsync.fulfilled', () => {
-    const itemIdToDelete = 'item-id-1';
+    const itemIdToDelete = 'test-id-1';
     const stateWithItems = {
       ...initialState,
       list: [
-        { _id: 'item-id-1', name: 'Item 1', description: 'Description 1', price: 10 },
-        { _id: 'item-id-2', name: 'Item 2', description: 'Description 2', price: 20 },
+        { _id: 'test-id-1', name: 'Item 1', description: 'Description 1', price: 10 },
+        { _id: 'test-id-2', name: 'Item 2', description: 'Description 2', price: 20 },
       ],
     };
     expect(
@@ -108,7 +106,7 @@ describe('items reducer', () => {
     ).toEqual({
       ...initialState,
       deleteItem: REQUEST_STATE.FULFILLED,
-      list: [{ _id: 'item-id-2', name: 'Item 2', description: 'Description 2', price: 20 }],
+      list: [{ _id: 'test-id-2', name: 'Item 2', description: 'Description 2', price: 20 }],
     });
   });
 
@@ -120,7 +118,7 @@ describe('items reducer', () => {
     ).toEqual({
       ...initialState,
       deleteItem: REQUEST_STATE.REJECTED,
-      error: rejectedAction.error, // Updated to use the error object from the action
+      error: rejectedAction.error,
     });
   });
 
@@ -135,13 +133,13 @@ describe('items reducer', () => {
   });
 
   it('should handle addUnitAsync.fulfilled', () => {
-    const itemId = 'item-id-1';
+    const itemId = 'test-id-1';
     const unitsToAdd = 1;
     const stateWithItems = {
       ...initialState,
       list: [
-        { _id: 'item-id-1', name: 'Item 1', description: 'Description 1', price: 10, unitsRemaining: 10 },
-        { _id: 'item-id-2', name: 'Item 2', description: 'Description 2', price: 20, unitsRemaining: 15 },
+        { _id: 'test-id-1', name: 'Item 1', description: 'Description 1', price: 10, unitsRemaining: 10 },
+        { _id: 'test-id-2', name: 'Item 2', description: 'Description 2', price: 20, unitsRemaining: 15 },
       ],
     };
     expect(
@@ -150,8 +148,8 @@ describe('items reducer', () => {
       ...initialState,
       addUnit: REQUEST_STATE.FULFILLED,
       list: [
-        { _id: 'item-id-1', name: 'Item 1', description: 'Description 1', price: 10, unitsRemaining: 11 },
-        { _id: 'item-id-2', name: 'Item 2', description: 'Description 2', price: 20, unitsRemaining: 15 },
+        { _id: 'test-id-1', name: 'Item 1', description: 'Description 1', price: 10, unitsRemaining: 11 },
+        { _id: 'test-id-2', name: 'Item 2', description: 'Description 2', price: 20, unitsRemaining: 15 },
       ],
     });
   });
@@ -164,7 +162,7 @@ describe('items reducer', () => {
     ).toEqual({
       ...initialState,
       addUnit: REQUEST_STATE.REJECTED,
-      error: rejectedAction.error, // Updated to use the error object from the action
+      error: rejectedAction.error,
     });
   });
 
